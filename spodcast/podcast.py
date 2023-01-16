@@ -187,7 +187,7 @@ def download_episode(episode_id) -> None:
                 log.info(f"Skipped {podcast_name}: {episode_name}")
             else:
                 log.warning(f"Downloaded {podcast_name}: {episode_name}")
-                upload_file(path, download_dir)
+                upload_file(path, download_dir, basename)
 
                 if Spodcast.CONFIG.get_rss_feed():
                     episode_info = {
@@ -233,7 +233,7 @@ def download_episode(episode_id) -> None:
     except ApiClient.StatusCodeException as status:
         log.warning("episode %s, StatusCodeException: %s", episode_id, status)
 
-def upload_file(path, bucket_prefix):
+def upload_file(path, bucket_prefix, basename):
     bucket = Spodcast.CONFIG.get_s3_bucket()
     if bucket is None or bucket == '':
         log.info('Skipping S3 upload, no bucket provided')

@@ -15,6 +15,7 @@ ROOT_PATH = 'ROOT_PATH'
 SKIP_EXISTING_FILES = 'SKIP_EXISTING_FILES'
 CHUNK_SIZE = 'CHUNK_SIZE'
 DOWNLOAD_DIR = 'DOWNLOAD_DIR'
+S3_BUCKET = 'S3_BUCKET'
 DOWNLOAD_REAL_TIME = 'DOWNLOAD_REAL_TIME'
 LANGUAGE = 'LANGUAGE'
 CREDENTIALS_LOCATION = 'CREDENTIALS_LOCATION'
@@ -29,6 +30,10 @@ CONFIG_VALUES = {
                             'type': str,
                             'arg': '--download-dir',
                             'help': 'set download directory path'},
+    S3_BUCKET:            { 'default': '',
+                            'type': str,
+                            'arg': '--s3-bucket',
+                            'help': 'the bucket to upload the file to S3' },
     ROOT_PATH:            { 'default': '../Spodcast/',
                             'type': str,
                             'arg': '--root-path',
@@ -169,6 +174,10 @@ class Config:
     @classmethod
     def get_download_dir(cls) -> str:
         return cls.get(DOWNLOAD_DIR)
+
+    @classmethod
+    def get_s3_bucket(cls) -> str:
+        return cls.get(S3_BUCKET)
 
     @classmethod
     def get_root_path(cls) -> str:

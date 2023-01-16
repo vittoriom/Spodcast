@@ -16,6 +16,7 @@
 [[ -n ${LANGUAGE} ]] || export LANGUAGE='en'
 [[ -n ${SKIP_EXISTING} ]] || export SKIP_EXISTING='yes'
 [[ -n ${DOWNLOAD_DIR} ]] || export DOWNLOAD_DIR=''
+[[ -n ${S3_BUCKET} ]] || export S3_BUCKET=''
 
 ## If Spotify credentials were supplied, create ${SPODCAST_ROOT}/spotify.rc
 [[ ${creds_supplied} == 'false' ]] || echo "${SPOTIFY_USERNAME} ${SPOTIFY_PASSWORD}" > ${SPODCAST_ROOT}/spotify.rc
@@ -41,6 +42,7 @@ then
                                         --log-level ${LOG_LEVEL} \
                                         --max-episodes ${MAX_EPISODES} \
                                         --download-dir ${DOWNLOAD_DIR} \
+                                        --s3-bucket ${S3_BUCKET} \
                                         "${SPOTIFY_PODCAST_URLS}"
                 else
                         echo "SPOTIFY_PODCAST_URLS is defined, but no credentials were detected. Please set the SPOTIFY_USERNAME and SPOTIFY_PASSWORD variables."

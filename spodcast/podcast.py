@@ -5,6 +5,7 @@ import time
 from datetime import datetime
 from html import escape
 import urllib.parse
+import boto3
 
 import base62
 from base62 import CHARSET_INVERTED
@@ -186,6 +187,7 @@ def download_episode(episode_id) -> None:
                 log.info(f"Skipped {podcast_name}: {episode_name}")
             else:
                 log.warning(f"Downloaded {podcast_name}: {episode_name}")
+                upload_file(path, download_dir)
 
                 if Spodcast.CONFIG.get_rss_feed():
                     episode_info = {
@@ -230,3 +232,18 @@ def download_episode(episode_id) -> None:
 
     except ApiClient.StatusCodeException as status:
         log.warning("episode %s, StatusCodeException: %s", episode_id, status)
+
+def upload_file(path, bucket_prefix):
+    bucket = Spodcast.CONFIG.get_s3_bucket()
+    if bucket is None or bucket == '':
+        log.info('Skipping S3 upload, no bucket provided')
+        return
+
+    session = boto3.session.Session()
+    log.debug("S3 creds: " + session.get_credentials().get_frozen_credentials())
+    s3 = session.client("s3")
+
+    try:
+        s3.upload_file(path, bucket, bucket_prefix + "/" + basename)
+    except ClientError as e:
+        log.error(e)

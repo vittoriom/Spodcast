@@ -1,15 +1,20 @@
 FROM python:3-alpine
 
+COPY ./run.sh /
+RUN chmod +x ./run.sh
+
 COPY . /app
 WORKDIR /app
 
 RUN apk --no-cache add gcc libc-dev ffmpeg \
 	&& pip3 install .
 
+RUN apk add bash
+
 VOLUME ["/data"]
 WORKDIR /data
 
-ENTRYPOINT ["/usr/local/bin/spodcast"]
+ENTRYPOINT ["/run.sh"]
 
 LABEL description="Spodcast is a caching Spotify podcast to RSS proxy. \
 Using Spodcast you can follow Spotify-hosted netcasts/podcasts using any \

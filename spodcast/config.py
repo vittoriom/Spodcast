@@ -14,6 +14,7 @@ VERSION_STR = pkg_resources.require("Spodcast")[0].version
 ROOT_PATH = 'ROOT_PATH'
 SKIP_EXISTING_FILES = 'SKIP_EXISTING_FILES'
 CHUNK_SIZE = 'CHUNK_SIZE'
+DOWNLOAD_DIR = 'DOWNLOAD_DIR'
 DOWNLOAD_REAL_TIME = 'DOWNLOAD_REAL_TIME'
 LANGUAGE = 'LANGUAGE'
 CREDENTIALS_LOCATION = 'CREDENTIALS_LOCATION'
@@ -24,6 +25,10 @@ RSS_FEED = 'RSS_FEED'
 TRANSCODE = 'TRANSCODE'
 
 CONFIG_VALUES = {
+    DOWNLOAD_DIR:         { 'default': '',
+                            'type': str,
+                            'arg': '--download-dir',
+                            'help': 'set download directory path'},
     ROOT_PATH:            { 'default': '../Spodcast/',
                             'type': str,
                             'arg': '--root-path',
@@ -160,6 +165,10 @@ class Config:
     @classmethod
     def get_config_dir(cls) -> str:
         return cls.get(CONFIG_DIR)
+
+    @classmethod
+    def get_download_dir(cls) -> str:
+        return cls.get(DOWNLOAD_DIR)
 
     @classmethod
     def get_root_path(cls) -> str:

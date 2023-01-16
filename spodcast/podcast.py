@@ -159,7 +159,15 @@ def download_episode(episode_id) -> None:
             log.warning('Skipping episode (episode NOT FOUND)')
         else:
             filename = clean_filename(podcast_name + ' - ' + episode_name)
-            show_directory = os.path.realpath(os.path.join(Spodcast.CONFIG.get_root_path(), clean_filename(podcast_name) + '/'))
+            download_dir = clean_filename(podcast_name)
+
+            download_dir_from_config = Spodcast.CONFIG.get_download_dir() 
+            log.info('Download directory from config is ' + download_dir_from_config)
+            if download_dir_from_config is not None and download_dir_from_config != '':
+                download_dir = download_dir_from_config
+            log.info('Final download directory is ' + download_dir)
+            
+            show_directory = os.path.realpath(os.path.join(Spodcast.CONFIG.get_root_path(), download_dir + '/'))
             os.makedirs(show_directory, exist_ok=True)
 
             if download_url is None:

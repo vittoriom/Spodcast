@@ -240,7 +240,6 @@ def upload_file(path, bucket_prefix):
         return
 
     session = boto3.session.Session()
-    log.debug("S3 creds: " + session.get_credentials().get_frozen_credentials())
     s3 = session.client("s3")
 
     try:

@@ -239,10 +239,37 @@ def upload_file(path, bucket_prefix, basename):
         log.info('Skipping S3 upload, no bucket provided')
         return
 
+    token = Spodcast.CONFIG.get_task_token()
     session = boto3.session.Session()
     s3 = session.client("s3")
+    sfn = session.client("stepfunctions")
 
     try:
-        s3.upload_file(path, bucket, bucket_prefix + "/" + basename)
+        s3.upload_file(path, bucket, bucket_prefix + "/" + basename)        
+        reportSuccess(sfn, token, bucket, bucket_prefix, basename)
     except ClientError as e:
         log.error(e)
+        reportFailure(sfn, token, e)
+
+def reportSuccess(sfn, token, bucket, bucket_prefix, basename):
+    if token == 'TEST_TOKEN':
+        log.warning('Test token specified, not invoking step functions for success')
+        return
+
+    sfn.send_task_success(
+        taskToken=token,
+        output=json.dumps({
+            "objectPath" : bucket + '/' + bucket_prefix + '/' + basename
+        })
+    )
+
+def reportFailure(sfn, token, e):
+    if token == 'TEST_TOKEN':
+        log.warning('Test token specified, not invoking step functions for failure')
+        return 
+
+    sfn.send_task_failure(
+        taskToken=token,
+        error=str(e)
+    )
+

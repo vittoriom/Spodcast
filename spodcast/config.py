@@ -16,6 +16,7 @@ SKIP_EXISTING_FILES = 'SKIP_EXISTING_FILES'
 CHUNK_SIZE = 'CHUNK_SIZE'
 DOWNLOAD_DIR = 'DOWNLOAD_DIR'
 S3_BUCKET = 'S3_BUCKET'
+TASK_TOKEN = 'TASK_TOKEN'
 DOWNLOAD_REAL_TIME = 'DOWNLOAD_REAL_TIME'
 LANGUAGE = 'LANGUAGE'
 CREDENTIALS_LOCATION = 'CREDENTIALS_LOCATION'
@@ -34,6 +35,10 @@ CONFIG_VALUES = {
                             'type': str,
                             'arg': '--s3-bucket',
                             'help': 'the bucket to upload the file to S3' },
+    TASK_TOKEN:           { 'default': '',
+                            'type': str,
+                            'arg': '--task-token',
+                            'help': 'the Step Functions task token to resume processing' },
     ROOT_PATH:            { 'default': '../Spodcast/',
                             'type': str,
                             'arg': '--root-path',
@@ -178,6 +183,10 @@ class Config:
     @classmethod
     def get_s3_bucket(cls) -> str:
         return cls.get(S3_BUCKET)
+
+    @classmethod 
+    def get_task_token(cls) -> str:
+        return cls.get(TASK_TOKEN)
 
     @classmethod
     def get_root_path(cls) -> str:

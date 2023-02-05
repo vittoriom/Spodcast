@@ -259,7 +259,7 @@ def reportSuccess(sfn, token, bucket, bucket_prefix, basename):
     sfn.send_task_success(
         taskToken=token,
         output=json.dumps({
-            "objectPath" : bucket + '/' + bucket_prefix + '/' + basename
+            "objectPath" : bucket_prefix + '/' + basename
         })
     )
 
